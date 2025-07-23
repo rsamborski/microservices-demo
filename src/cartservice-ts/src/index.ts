@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import { getCart, addItem, emptyCart } from './handlers';
+import { getCart, addItem, emptyCart, healthCheck } from './handlers';
 import { createCartStore } from './cartStoreFactory';
 import { ICartStore } from './cartstore/ICartStore';
 
@@ -17,6 +17,7 @@ createCartStore().then(store => {
   app.get('/cart/:userId', getCart(cartStore));
   app.post('/cart', addItem(cartStore));
   app.delete('/cart/:userId', emptyCart(cartStore));
+  app.get('/health', healthCheck(cartStore));
 
   if (process.env.NODE_ENV !== 'test') {
     app.listen(port, () => {

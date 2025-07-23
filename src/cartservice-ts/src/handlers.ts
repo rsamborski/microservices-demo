@@ -33,3 +33,13 @@ export const emptyCart = (store: ICartStore) => async (req: Request, res: Respon
     res.status(500).send('Error emptying cart');
   }
 };
+
+export const healthCheck = (store: ICartStore) => async (req: Request, res: Response) => {
+  try {
+    await store.ping();
+    res.status(200).json({ status: 'SERVING' });
+  } catch (err) {
+    console.error(err);
+    res.status(503).json({ status: 'NOT_SERVING' });
+  }
+};

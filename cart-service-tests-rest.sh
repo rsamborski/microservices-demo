@@ -17,3 +17,5 @@ curl -X DELETE "http://$SERVER_ADDR/cart/$USER_ID"
 # Get the cart again to verify it's empty
 curl "http://$SERVER_ADDR/cart/$USER_ID"
 
+# Check the health of the service
+curl "http://$SERVER_ADDR/health"
