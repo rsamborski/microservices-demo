@@ -1,20 +1,35 @@
 import { Request, Response } from 'express';
-import { getCart as getCartFromStore, addItem as addItemToStore, emptyCart as emptyCartInStore } from './cart';
+import { ICartStore } from './cartstore/ICartStore';
 
-export const getCart = (req: Request, res: Response) => {
+export const getCart = (store: ICartStore) => async (req: Request, res: Response) => {
   const { userId } = req.params;
-  const cart = getCartFromStore(userId);
-  res.status(200).json(cart);
+  try {
+    const cart = await store.getCart(userId);
+    res.status(200).json(cart);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error getting cart');
+  }
 };
 
-export const addItem = (req: Request, res: Response) => {
+export const addItem = (store: ICartStore) => async (req: Request, res: Response) => {
   const { userId, item } = req.body;
-  addItemToStore(userId, item);
-  res.status(201).send();
+  try {
+    await store.addItem(userId, item.productId, item.quantity);
+    res.status(201).send();
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error adding item to cart');
+  }
 };
 
-export const emptyCart = (req: Request, res: Response) => {
+export const emptyCart = (store: ICartStore) => async (req: Request, res: Response) => {
   const { userId } = req.params;
-  emptyCartInStore(userId);
-  res.status(204).send();
+  try {
+    await store.emptyCart(userId);
+    res.status(204).send();
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error emptying cart');
+  }
 };

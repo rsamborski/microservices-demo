@@ -1,5 +1,5 @@
 # Use an official Node.js runtime as a parent image
-FROM node:22-slim as builder
+FROM node:22-slim AS builder
 
 # Set the working directory in the container
 WORKDIR /usr/src/app
